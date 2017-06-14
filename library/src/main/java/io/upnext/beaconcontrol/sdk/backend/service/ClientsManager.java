@@ -45,27 +45,27 @@ public class ClientsManager {
     private Set<String> clients = new HashSet<>();
     private Map<BeaconModel, BeaconEvent> monitoredBeacons = new HashMap<>();
 
-    protected ClientsManager(Context context, BeaconManager beaconManager) {
+    ClientsManager(Context context, BeaconManager beaconManager) {
         this.context = context;
         this.beaconManager = beaconManager;
     }
 
-    protected boolean hasClients() {
+    boolean hasClients() {
         return !clients.isEmpty();
     }
 
-    protected boolean containsClient(String clientId) {
+    boolean containsClient(String clientId) {
         return clients.contains(clientId);
     }
 
-    protected void addClient(String clientId, GetConfigurationsResponse conf) {
+    void addClient(String clientId, GetConfigurationsResponse conf) {
         clients.add(clientId);
 
         addMonitoredBeacons(clientId, conf);
         notifyClientsAboutConfigurationLoaded(clientId, conf);
     }
 
-    protected void updateClient(String clientId, GetConfigurationsResponse conf) {
+    void updateClient(String clientId, GetConfigurationsResponse conf) {
         clients.add(clientId);
 
         removeMonitoredBeacons(clientId);
@@ -73,25 +73,25 @@ public class ClientsManager {
         notifyClientsAboutConfigurationLoaded(clientId, conf);
     }
 
-    protected void removeClient(String clientId) {
+    void removeClient(String clientId) {
         removeMonitoredBeacons(clientId);
 
         clients.remove(clientId);
     }
 
-    protected BeaconEvent getBeaconEvent(String beaconUniqueId) {
+    BeaconEvent getBeaconEvent(String beaconUniqueId) {
         BeaconModel bm = getMonitoredBeaconModel(beaconUniqueId);
         return bm == null ? null : monitoredBeacons.get(bm);
     }
 
-    protected void updateBeaconEvent(String beaconUniqueId, BeaconEvent event) {
+    void updateBeaconEvent(String beaconUniqueId, BeaconEvent event) {
         BeaconModel bm = getMonitoredBeaconModel(beaconUniqueId);
         if (bm != null) {
             monitoredBeacons.put(bm, event);
         }
     }
 
-    protected void notifyClientsAboutAction(String beaconUniqueId, BeaconEvent beaconEvent, long eventTimestamp) {
+    void notifyClientsAboutAction(String beaconUniqueId, BeaconEvent beaconEvent, long eventTimestamp) {
         BeaconModel bm = getMonitoredBeaconModel(beaconUniqueId);
         if (bm == null) return;
 
@@ -104,7 +104,7 @@ public class ClientsManager {
         }
     }
 
-    protected void notifyClientsAboutBeaconProximityChange(String beaconUniqueId, BeaconEvent beaconEvent, long eventTimestamp, double distance) {
+    void notifyClientsAboutBeaconProximityChange(String beaconUniqueId, BeaconEvent beaconEvent, long eventTimestamp, double distance) {
         BeaconModel bm = getMonitoredBeaconModel(beaconUniqueId);
         if (bm == null) return;
 
@@ -113,7 +113,7 @@ public class ClientsManager {
         notifyClientsAboutBeaconProximityChange(bm, eventInfo, distance);
     }
 
-    protected BeaconEvent getBeaconEventFromDistance(double distance) {
+    BeaconEvent getBeaconEventFromDistance(double distance) {
         return BeaconEvent.fromBeaconDistance(distance);
     }
 
