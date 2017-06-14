@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import io.upnext.beaconcontrol.sdk.Beacon;
 import io.upnext.beaconcontrol.sdk.Beacon.Proximity;
@@ -166,7 +167,11 @@ public class ClientsManager {
     }
 
     private void addNewRegion(BeaconModel bm) {
-        Region region = new Region(bm.getUniqueId(), Identifier.parse(bm.getProximityUUID()), Identifier.parse(bm.getProximityMajor().toString()), Identifier.parse(bm.getProximityMinor().toString()));
+
+        Region region = new Region(bm.getUniqueId(),
+                Identifier.fromUuid(UUID.fromString(bm.getProximityUUID())),
+                Identifier.parse(bm.getProximityMajor().toString()),
+                Identifier.parse(bm.getProximityMinor().toString()));
         try {
             beaconManager.startMonitoringBeaconsInRegion(region);
             beaconManager.startRangingBeaconsInRegion(region);
